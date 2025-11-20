@@ -1,11 +1,15 @@
-import { describe, it, expect, beforeEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import App from './App'
 
 describe('App Component', () => {
   beforeEach(() => {
     render(<App />)
+  })
+
+  afterEach(() => {
+    cleanup()
   })
 
   describe('Initial Rendering', () => {
@@ -213,7 +217,7 @@ describe('App Component', () => {
         
         // Fill text and check checkbox
         await user.type(screen.getByTestId('s1-text-field').querySelector('input'), 'Valid text')
-        await user.click(screen.getByTestId('s1-checkbox'))
+        await user.click(screen.getByTestId('s1-checkbox').querySelector('input[type="checkbox"]'))
         
         await user.click(screen.getByTestId('s1-validate-btn'))
         
@@ -231,7 +235,7 @@ describe('App Component', () => {
         await user.click(dropdownButton)
         await waitFor(() => screen.getByText('The Godfather'))
         await user.click(screen.getByText('The Godfather'))
-        await user.click(screen.getByTestId('s1-checkbox'))
+        await user.click(screen.getByTestId('s1-checkbox').querySelector('input[type="checkbox"]'))
         
         await user.click(screen.getByTestId('s1-validate-btn'))
         
@@ -250,7 +254,7 @@ describe('App Component', () => {
         await waitFor(() => screen.getByText('The Godfather'))
         await user.click(screen.getByText('The Godfather'))
         await user.type(screen.getByTestId('s1-text-field').querySelector('input'), '   ')
-        await user.click(screen.getByTestId('s1-checkbox'))
+        await user.click(screen.getByTestId('s1-checkbox').querySelector('input[type="checkbox"]'))
         
         await user.click(screen.getByTestId('s1-validate-btn'))
         
@@ -287,7 +291,7 @@ describe('App Component', () => {
         await waitFor(() => screen.getByText('The Godfather'))
         await user.click(screen.getByText('The Godfather'))
         await user.type(screen.getByTestId('s1-text-field').querySelector('input'), 'Invalid@#$%')
-        await user.click(screen.getByTestId('s1-checkbox'))
+        await user.click(screen.getByTestId('s1-checkbox').querySelector('input[type="checkbox"]'))
         
         await user.click(screen.getByTestId('s1-validate-btn'))
         
@@ -306,7 +310,7 @@ describe('App Component', () => {
         await waitFor(() => screen.getByText('The Godfather'))
         await user.click(screen.getByText('The Godfather'))
         await user.type(screen.getByTestId('s1-text-field').querySelector('input'), 'Valid text 123')
-        await user.click(screen.getByTestId('s1-checkbox'))
+        await user.click(screen.getByTestId('s1-checkbox').querySelector('input[type="checkbox"]'))
         
         await user.click(screen.getByTestId('s1-validate-btn'))
         
@@ -327,7 +331,7 @@ describe('App Component', () => {
         await waitFor(() => screen.getByText('The Godfather'))
         await user.click(screen.getByText('The Godfather'))
         await user.type(screen.getByTestId('s1-text-field').querySelector('input'), 'Test 123 ABC xyz')
-        await user.click(screen.getByTestId('s1-checkbox'))
+        await user.click(screen.getByTestId('s1-checkbox').querySelector('input[type="checkbox"]'))
         
         await user.click(screen.getByTestId('s1-validate-btn'))
         
@@ -360,7 +364,7 @@ describe('App Component', () => {
         await waitFor(() => screen.getByText('12 Angry Men'))
         await user.click(screen.getByText('12 Angry Men'))
         await user.type(screen.getByTestId('s2-text-field').querySelector('input'), 'Another valid text')
-        await user.click(screen.getByTestId('s2-checkbox'))
+        await user.click(screen.getByTestId('s2-checkbox').querySelector('input[type="checkbox"]'))
         
         await user.click(screen.getByTestId('s2-validate-btn'))
         
@@ -399,7 +403,7 @@ describe('App Component', () => {
       await waitFor(() => screen.getByText('The Godfather'))
       await user.click(screen.getByText('The Godfather'))
       await user.type(screen.getByTestId('s1-text-field').querySelector('input'), 'Some text')
-      await user.click(screen.getByTestId('s1-checkbox'))
+      await user.click(screen.getByTestId('s1-checkbox').querySelector('input[type="checkbox"]'))
       
       // Validate to show success
       await user.click(screen.getByTestId('s1-validate-btn'))
@@ -425,7 +429,7 @@ describe('App Component', () => {
       await waitFor(() => screen.getByText('The Dark Knight'))
       await user.click(screen.getByText('The Dark Knight'))
       await user.type(screen.getByTestId('s2-text-field').querySelector('input'), 'Test text')
-      await user.click(screen.getByTestId('s2-checkbox'))
+      await user.click(screen.getByTestId('s2-checkbox').querySelector('input[type="checkbox"]'))
       
       // Reset
       await user.click(screen.getByTestId('s2-reset-btn'))
@@ -476,7 +480,7 @@ describe('App Component', () => {
         await waitFor(() => screen.getByText('The Godfather'))
         await user.click(screen.getByText('The Godfather'))
         await user.type(screen.getByTestId('s1-text-field').querySelector('input'), 'Valid text')
-        await user.click(screen.getByTestId('s1-checkbox'))
+        await user.click(screen.getByTestId('s1-checkbox').querySelector('input[type="checkbox"]'))
         
         // Leave section 2 invalid and validate both
         await user.click(screen.getByTestId('s1-validate-btn'))
@@ -494,7 +498,7 @@ describe('App Component', () => {
       // Set different values for each section
       await user.type(screen.getByTestId('s1-text-field').querySelector('input'), 'Section 1')
       await user.type(screen.getByTestId('s2-text-field').querySelector('input'), 'Section 2')
-      await user.click(screen.getByTestId('s1-checkbox'))
+      await user.click(screen.getByTestId('s1-checkbox').querySelector('input[type="checkbox"]'))
       
       // Check state display
       expect(screen.getByText(/Section 1: checked=true — selected=none — text="Section 1"/)).toBeInTheDocument()
@@ -526,7 +530,7 @@ describe('App Component', () => {
       await waitFor(() => screen.getByText('The Godfather'))
       await user.click(screen.getByText('The Godfather'))
       await user.type(screen.getByTestId('s1-text-field').querySelector('input'), '12345')
-      await user.click(screen.getByTestId('s1-checkbox'))
+      await user.click(screen.getByTestId('s1-checkbox').querySelector('input[type="checkbox"]'))
       
       await user.click(screen.getByTestId('s1-validate-btn'))
       
@@ -543,7 +547,7 @@ describe('App Component', () => {
       await waitFor(() => screen.getByText('The Godfather'))
       await user.click(screen.getByText('The Godfather'))
       await user.type(screen.getByTestId('s1-text-field').querySelector('input'), 'OnlyLetters')
-      await user.click(screen.getByTestId('s1-checkbox'))
+      await user.click(screen.getByTestId('s1-checkbox').querySelector('input[type="checkbox"]'))
       
       await user.click(screen.getByTestId('s1-validate-btn'))
       
@@ -565,7 +569,7 @@ describe('App Component', () => {
       await waitFor(() => screen.getByText('The Godfather'))
       await user.click(screen.getByText('The Godfather'))
       await user.type(screen.getByTestId('s1-text-field').querySelector('input'), 'Valid text')
-      await user.click(screen.getByTestId('s1-checkbox'))
+      await user.click(screen.getByTestId('s1-checkbox').querySelector('input[type="checkbox"]'))
       
       // Second validation - should show success and clear error
       await user.click(screen.getByTestId('s1-validate-btn'))
