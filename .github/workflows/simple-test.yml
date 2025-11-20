@@ -23,14 +23,18 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: List available scripts
-      run: npm run
+    - name: Verify dependencies
+      run: |
+        echo "Checking if jsdom is installed:"
+        npm list jsdom || echo "jsdom not found"
+        echo "Checking if vitest is installed:"
+        npm list vitest || echo "vitest not found"
 
-    - name: Run tests with Vitest
-      run: npx vitest run
+    - name: Run tests using npm script
+      run: npm test -- --run
 
-    - name: Run tests with coverage
-      run: npx vitest run --coverage
+    - name: Run tests with coverage using npm script
+      run: npm run test:coverage
 
     - name: Upload coverage report
       uses: actions/upload-artifact@v4
@@ -39,3 +43,12 @@ jobs:
         name: coverage-report
         path: coverage/
         retention-days: 30
+
+    - name: Display test summary
+      if: always()
+      run: |
+        echo "## Test Results Summary" >> $GITHUB_STEP_SUMMARY
+        echo "✅ Tests completed" >> $GITHUB_STEP_SUMMARY
+        if [ -f coverage/coverage-summary.json ]; then
+          echo "📊 Coverage report generated" >> $GITHUB_STEP_SUMMARY
+        fi
