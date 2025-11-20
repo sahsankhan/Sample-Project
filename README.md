@@ -1,18 +1,26 @@
-# sampleproject
+Prerequisites
 
-Vite + React + Material UI example containing Checkbox, Autocomplete, TextField.
+Before you start, make sure you have the following installed:
+•	Node.js: Version 16.0 or higher
+•	npm: Version 7.0 or higher (comes with Node.js)
+•	Modern Browser: Chrome, Firefox, Safari, or Edge (for viewing test reports)
 
-Quick start (Windows `cmd.exe`):
+Step 1: Install Dependencies
+Open a terminal, navigate to your project directory, and run:
+•	cd Sample-Project
+•	npm install
 
-```
-cd sampleproject
-npm install
-npm run dev
-```
+This will install:
+•	All production dependencies (React, Material-UI, etc.)
+•	All testing dependencies (Vitest, Testing Library, etc.)
+•	Development tools and build dependencies
 
-Open the printed localhost URL in your browser.
+Step 2: Verify Installation
+Run tests to ensure everything is installed correctly:
+•	npm run test:run
 
-Notes:
+To generate a coverage report with a UI:
+•	npm run test:ui
 
-- This project was scaffolded to match `create vite@latest sampleproject -- --template react`.
-- Material UI packages are declared in `package.json`. If you want me to run `npm install` and start the dev server here, tell me and I can run those commands.
+To view the coverage report in your browser:
+•	start TEST_REPORT.html
