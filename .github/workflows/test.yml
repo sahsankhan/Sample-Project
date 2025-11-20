@@ -2,9 +2,9 @@ name: Unit Tests
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, develop, master ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main, develop, master ]
 
 jobs:
   test:
@@ -24,30 +24,35 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
 
+    - name: Debug - Check package.json
+      run: |
+        echo "Checking package.json scripts:"
+        cat package.json | grep -A 10 '"scripts"'
+        echo "Available npm scripts:"
+        npm run
+
     - name: Install dependencies
       run: npm ci
 
     - name: Run tests
-      run: npm run test:run
+      run: |
+        echo "Running tests..."
+        npm run test:run || npm test -- --run
 
     - name: Generate coverage report
-      run: npm run test:coverage
-
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        file: ./coverage/coverage-final.json
-        flags: unittests
-        name: codecov-umbrella
+      run: |
+        echo "Generating coverage report..."
+        npm run test:coverage || npm test -- --run --coverage
 
     - name: Upload test results
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: test-results-${{ matrix.node-version }}
+        name: test-results-node-${{ matrix.node-version }}
         path: |
           coverage/
           TEST_REPORT.html
+        retention-days: 30
 
     - name: Comment PR with coverage
       if: github.event_name == 'pull_request'
