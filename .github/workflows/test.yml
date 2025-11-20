@@ -21,13 +21,21 @@ jobs:
         cache: 'npm'
 
     - name: Install dependencies
-      run: npm install
+      run: npm ci
 
-    - name: Run tests
-      run: npm run test:run
+    - name: Run tests with environment variables
+      run: |
+        export NODE_OPTIONS="--max-old-space-size=4096"
+        npm run test:run
+      env:
+        NODE_ENV: test
 
     - name: Generate coverage report
-      run: npm run test:coverage
+      run: |
+        export NODE_OPTIONS="--max-old-space-size=4096"
+        npm run test:coverage
+      env:
+        NODE_ENV: test
 
     - name: Upload test results
       uses: actions/upload-artifact@v4
