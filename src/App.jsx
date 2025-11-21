@@ -21,6 +21,14 @@ const top100Films = [
   { title: "Schindler's List", year: 1993 }
 ]
 
+const top100seasons = [
+  { title: 'Wednesday', year: 1994 },
+  { title: 'Stranger Things', year: 1972 },
+  { title: 'Squid Game', year: 2008 },
+  { title: 'The Witcher', year: 1957 },
+  { title: "Daredevil", year: 1993 }
+]
+
 const initialState = { checked: false, value: null, text: '' }
 
 export default function App() {
@@ -32,8 +40,8 @@ export default function App() {
   function validateSection(which) {
     const sec = which === 's1' ? s1 : s2
     const problems = []
-    if (!sec.value) problems.push('Please choose a film')
-    if (!sec.text || !sec.text.trim()) problems.push('Text field is required')
+    if (!sec.value) problems.push(which === 's1' ? 'Please choose a film' : 'Please choose a Season')
+    if (!sec.text || !sec.text.trim()) problems.push('Review field is required')
     // Disallow special characters: only letters, numbers and spaces allowed
     const allowedRegex = /^[A-Za-z0-9\s]+$/
     if (sec.text && !allowedRegex.test(sec.text)) problems.push('Text contains invalid characters (only letters, numbers and spaces allowed)')
@@ -58,13 +66,13 @@ export default function App() {
   return (
     <Container maxWidth="md" sx={{ mt: 6 }}>
       <Typography variant="h4" component="h1" gutterBottom>
-        Validation Demo — Two Sections
+        Mainteny — QA Demo
       </Typography>
 
       {/* Section 1 */}
       <Box sx={{ mb: 4, p: 3, background: '#fff', borderRadius: 1, boxShadow: 1 }}>
         <Typography variant="h6" gutterBottom>
-          Section 1
+          Film Review 
         </Typography>
 
         <Box sx={{ mb: 2 }}>
@@ -81,7 +89,7 @@ export default function App() {
         <Box sx={{ mb: 2 }}>
           <TextField
             data-testid="s1-text-field"
-            label="Text for section 1"
+            label="Write your review"
             variant="outlined"
             fullWidth
             value={s1.text}
@@ -92,13 +100,13 @@ export default function App() {
         <Box sx={{ mb: 2 }}>
           <FormControlLabel
             control={<Checkbox data-testid="s1-checkbox" checked={s1.checked} onChange={(e) => setS1((p) => ({ ...p, checked: e.target.checked }))} />}
-            label={s1.checked ? 'Checked' : 'Unchecked'}
+            label={s1.checked ? 'Terms and Conditions (accepted)' : 'Terms and Conditions (not accepted)'}
           />
         </Box>
 
         <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
           <Button data-testid="s1-validate-btn" variant="contained" onClick={() => validateSection('s1')}>
-            Validate
+            Submit
           </Button>
           <Button data-testid="s1-reset-btn" variant="outlined" onClick={() => resetSection('s1')}>
             Reset
@@ -113,7 +121,7 @@ export default function App() {
 
         {success.s1 && (
           <Alert data-testid="s1-success-alert" severity="success" sx={{ mt: 1 }}>
-            Section 1 is valid
+            Film Review is valid
           </Alert>
         )}
       </Box>
@@ -123,7 +131,7 @@ export default function App() {
       {/* Section 2 */}
       <Box sx={{ mb: 4, p: 3, background: '#fff', borderRadius: 1, boxShadow: 1 }}>
         <Typography variant="h6" gutterBottom>
-          Section 2
+          Season Review
         </Typography>
 
         <Box sx={{ mb: 2 }}>
@@ -131,16 +139,16 @@ export default function App() {
             data-testid="s2-film-autocomplete"
             value={s2.value}
             onChange={(event, newValue) => setS2((p) => ({ ...p, value: newValue }))}
-            options={top100Films}
+            options={top100seasons}
             getOptionLabel={(option) => option.title}
-            renderInput={(params) => <TextField {...params} label="Choose a film" data-testid="s2-film-input" />}
+            renderInput={(params) => <TextField {...params} label="Choose a Season" data-testid="s2-film-input" />}
           />
         </Box>
 
         <Box sx={{ mb: 2 }}>
           <TextField
             data-testid="s2-text-field"
-            label="Text for section 2"
+            label="Write your review"
             variant="outlined"
             fullWidth
             value={s2.text}
@@ -151,13 +159,13 @@ export default function App() {
         <Box sx={{ mb: 2 }}>
           <FormControlLabel
             control={<Checkbox data-testid="s2-checkbox" checked={s2.checked} onChange={(e) => setS2((p) => ({ ...p, checked: e.target.checked }))} />}
-            label={s2.checked ? 'Checked' : 'Unchecked'}
+            label={s2.checked ? 'Terms and Conditions (accepted)' : 'Terms and Conditions (not accepted)'}
           />
         </Box>
 
         <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
           <Button data-testid="s2-validate-btn" variant="contained" onClick={() => validateSection('s2')}>
-            Validate
+            Submit
           </Button>
           <Button data-testid="s2-reset-btn" variant="outlined" onClick={() => resetSection('s2')}>
             Reset
@@ -172,20 +180,12 @@ export default function App() {
 
         {success.s2 && (
           <Alert data-testid="s2-success-alert" severity="success" sx={{ mt: 1 }}>
-            Section 2 is valid
+            Season Review is valid
           </Alert>
         )}
       </Box>
 
-      <Box sx={{ mt: 3 }}>
-        <Typography variant="subtitle1">Current values</Typography>
-        <Typography variant="body2" color="text.secondary">
-          Section 1: checked={String(s1.checked)} — selected={s1.value ? s1.value.title : 'none'} — text="{s1.text}"
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Section 2: checked={String(s2.checked)} — selected={s2.value ? s2.value.title : 'none'} — text="{s2.text}"
-        </Typography>
-      </Box>
+      
     </Container>
   )
 }

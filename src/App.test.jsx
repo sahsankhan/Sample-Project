@@ -14,12 +14,12 @@ describe('App Component', () => {
 
   describe('Initial Rendering', () => {
     it('renders the main title', () => {
-      expect(screen.getByText('Validation Demo — Two Sections')).toBeInTheDocument()
+      expect(screen.getByText('Mainteny — QA Demo')).toBeInTheDocument()
     })
 
     it('renders both sections', () => {
-      expect(screen.getByText('Section 1')).toBeInTheDocument()
-      expect(screen.getByText('Section 2')).toBeInTheDocument()
+      expect(screen.getByText('Film Review')).toBeInTheDocument()
+      expect(screen.getByText('Season Review')).toBeInTheDocument()
     })
 
     it('renders all form elements for both sections', () => {
@@ -39,8 +39,10 @@ describe('App Component', () => {
     })
 
     it('shows initial state values', () => {
-      expect(screen.getByText(/Section 1: checked=false — selected=none — text=""/)).toBeInTheDocument()
-      expect(screen.getByText(/Section 2: checked=false — selected=none — text=""/)).toBeInTheDocument()
+      // State display has been removed from the component
+      // This test is now checking that checkboxes are unchecked (covered by other tests)
+      expect(screen.getByTestId('s1-checkbox').querySelector('input[type="checkbox"]')).not.toBeChecked()
+      expect(screen.getByTestId('s2-checkbox').querySelector('input[type="checkbox"]')).not.toBeChecked()
     })
 
     it('has unchecked checkboxes initially', () => {
@@ -62,7 +64,8 @@ describe('App Component', () => {
       await user.type(textField, 'Hello World')
       
       expect(textField).toHaveValue('Hello World')
-      expect(screen.getByText(/Section 1: checked=false — selected=none — text="Hello World"/)).toBeInTheDocument()
+      // State display removed - just verify the text field has the value
+      expect(screen.getByTestId('s1-text-field').querySelector('input')).toHaveValue('Hello World')
     })
 
     it('updates text field value when typing in section 2', async () => {
@@ -72,7 +75,8 @@ describe('App Component', () => {
       await user.type(textField, 'Test Text')
       
       expect(textField).toHaveValue('Test Text')
-      expect(screen.getByText(/Section 2: checked=false — selected=none — text="Test Text"/)).toBeInTheDocument()
+      // State display removed - just verify the text field has the value
+      expect(screen.getByTestId('s2-text-field').querySelector('input')).toHaveValue('Test Text')
     })
 
     it('handles special characters in text field', async () => {
@@ -102,12 +106,10 @@ describe('App Component', () => {
       await user.click(checkbox)
       
       expect(checkbox).toBeChecked()
-      expect(screen.getByText(/Section 1: checked=true/)).toBeInTheDocument()
       
       await user.click(checkbox)
       
       expect(checkbox).not.toBeChecked()
-      expect(screen.getByText(/Section 1: checked=false/)).toBeInTheDocument()
     })
 
     it('toggles checkbox in section 2', async () => {
@@ -117,7 +119,6 @@ describe('App Component', () => {
       await user.click(checkbox)
       
       expect(checkbox).toBeChecked()
-      expect(screen.getByText(/Section 2: checked=true/)).toBeInTheDocument()
     })
 
     it('updates checkbox label when checked/unchecked', async () => {
@@ -126,12 +127,12 @@ describe('App Component', () => {
       const section1 = screen.getByTestId('s1-checkbox').closest('.MuiBox-root')
       
       // Initially unchecked - check within section 1 context
-      expect(section1.querySelector('.MuiFormControlLabel-label')).toHaveTextContent('Unchecked')
+      expect(section1.querySelector('.MuiFormControlLabel-label')).toHaveTextContent('Terms and Conditions (not accepted)')
       
       await user.click(checkbox)
       
-      // Should show "Checked" when checked
-      expect(section1.querySelector('.MuiFormControlLabel-label')).toHaveTextContent('Checked')
+      // Should show "Terms and Conditions (accepted)" when checked
+      expect(section1.querySelector('.MuiFormControlLabel-label')).toHaveTextContent('Terms and Conditions (accepted)')
     })
   })
 
@@ -163,7 +164,8 @@ describe('App Component', () => {
       await user.click(screen.getByText('The Shawshank Redemption'))
       
       await waitFor(() => {
-        expect(screen.getByText(/Section 1: checked=false — selected=The Shawshank Redemption/)).toBeInTheDocument()
+        // State display removed - verify film is selected by checking input value
+        expect(screen.getByTestId('s1-film-input').querySelector('input')).toHaveValue('The Shawshank Redemption')
       })
     })
 
@@ -173,14 +175,16 @@ describe('App Component', () => {
       
       await user.click(dropdownButton)
       
-      await waitFor(() => {
-        expect(screen.getByText('The Dark Knight')).toBeInTheDocument()
-      })
+        await waitFor(() => {
+          expect(screen.getByText('Wednesday')).toBeInTheDocument()
+        })
       
-      await user.click(screen.getByText('The Dark Knight'))
+      await user.click(screen.getByText('Wednesday'))
       
       await waitFor(() => {
-        expect(screen.getByText(/Section 2: checked=false — selected=The Dark Knight/)).toBeInTheDocument()
+        // State display removed - Section 2 now uses seasons, not films
+        // Verify season is selected by checking input value
+        expect(screen.getByTestId('s2-film-input').querySelector('input')).toHaveValue('Wednesday')
       })
     })
 
@@ -208,7 +212,7 @@ describe('App Component', () => {
         await waitFor(() => {
           const errorAlert = screen.getByTestId('s1-error-alert')
           expect(errorAlert).toBeInTheDocument()
-          expect(errorAlert).toHaveTextContent('Please choose a film. Text field is required. You must check the box')
+          expect(errorAlert).toHaveTextContent('Please choose a film. Review field is required. You must check the box')
         })
       })
 
@@ -241,7 +245,7 @@ describe('App Component', () => {
         
         await waitFor(() => {
           const errorAlert = screen.getByTestId('s1-error-alert')
-          expect(errorAlert).toHaveTextContent('Text field is required')
+          expect(errorAlert).toHaveTextContent('Review field is required')
         })
       })
 
@@ -260,7 +264,7 @@ describe('App Component', () => {
         
         await waitFor(() => {
           const errorAlert = screen.getByTestId('s1-error-alert')
-          expect(errorAlert).toHaveTextContent('Text field is required')
+          expect(errorAlert).toHaveTextContent('Review field is required')
         })
       })
 
@@ -317,7 +321,7 @@ describe('App Component', () => {
         await waitFor(() => {
           const successAlert = screen.getByTestId('s1-success-alert')
           expect(successAlert).toBeInTheDocument()
-          expect(successAlert).toHaveTextContent('Section 1 is valid')
+          expect(successAlert).toHaveTextContent('Film Review is valid')
           expect(screen.queryByTestId('s1-error-alert')).not.toBeInTheDocument()
         })
       })
@@ -351,7 +355,7 @@ describe('App Component', () => {
         await waitFor(() => {
           const errorAlert = screen.getByTestId('s2-error-alert')
           expect(errorAlert).toBeInTheDocument()
-          expect(errorAlert).toHaveTextContent('Please choose a film. Text field is required. You must check the box')
+          expect(errorAlert).toHaveTextContent('Please choose a Season. Review field is required. You must check the box')
         })
       })
 
@@ -361,8 +365,8 @@ describe('App Component', () => {
         // Fill all fields correctly
         const dropdownButton = screen.getByTestId('s2-film-autocomplete').querySelector('[title="Open"]')
         await user.click(dropdownButton)
-        await waitFor(() => screen.getByText('12 Angry Men'))
-        await user.click(screen.getByText('12 Angry Men'))
+        await waitFor(() => screen.getByText('Wednesday'))
+        await user.click(screen.getByText('Wednesday'))
         await user.type(screen.getByTestId('s2-text-field').querySelector('input'), 'Another valid text')
         await user.click(screen.getByTestId('s2-checkbox').querySelector('input[type="checkbox"]'))
         
@@ -371,7 +375,7 @@ describe('App Component', () => {
         await waitFor(() => {
           const successAlert = screen.getByTestId('s2-success-alert')
           expect(successAlert).toBeInTheDocument()
-          expect(successAlert).toHaveTextContent('Section 2 is valid')
+          expect(successAlert).toHaveTextContent('Season Review is valid')
         })
       })
     })
@@ -387,6 +391,8 @@ describe('App Component', () => {
         
         await waitFor(() => {
           const errorAlert = screen.getByTestId('s1-error-alert')
+          // When text has invalid characters but is not empty, "Review field is required" is not added
+          // Only "Text contains invalid characters" is added
           expect(errorAlert).toHaveTextContent('Please choose a film. Text contains invalid characters (only letters, numbers and spaces allowed). You must check the box')
         })
       })
@@ -417,7 +423,8 @@ describe('App Component', () => {
       expect(screen.getByTestId('s1-checkbox').querySelector('input[type="checkbox"]')).not.toBeChecked()
       expect(screen.queryByTestId('s1-success-alert')).not.toBeInTheDocument()
       expect(screen.queryByTestId('s1-error-alert')).not.toBeInTheDocument()
-      expect(screen.getByText(/Section 1: checked=false — selected=none — text=""/)).toBeInTheDocument()
+      // State display removed - verify fields are reset by checking their values
+      expect(screen.getByTestId('s1-film-input').querySelector('input')).toHaveValue('')
     })
 
     it('resets section 2 to initial state', async () => {
@@ -426,8 +433,8 @@ describe('App Component', () => {
       // Fill all fields
       const dropdownButton = screen.getByTestId('s2-film-autocomplete').querySelector('[title="Open"]')
       await user.click(dropdownButton)
-      await waitFor(() => screen.getByText('The Dark Knight'))
-      await user.click(screen.getByText('The Dark Knight'))
+      await waitFor(() => screen.getByText('Wednesday'))
+      await user.click(screen.getByText('Wednesday'))
       await user.type(screen.getByTestId('s2-text-field').querySelector('input'), 'Test text')
       await user.click(screen.getByTestId('s2-checkbox').querySelector('input[type="checkbox"]'))
       
@@ -437,7 +444,8 @@ describe('App Component', () => {
       // Check all fields are reset
       expect(screen.getByTestId('s2-text-field').querySelector('input')).toHaveValue('')
       expect(screen.getByTestId('s2-checkbox').querySelector('input[type="checkbox"]')).not.toBeChecked()
-      expect(screen.getByText(/Section 2: checked=false — selected=none — text=""/)).toBeInTheDocument()
+      // State display removed - verify fields are reset by checking their values
+      expect(screen.getByTestId('s2-film-input').querySelector('input')).toHaveValue('')
     })
 
     it('resets errors after showing validation errors', async () => {
@@ -501,8 +509,11 @@ describe('App Component', () => {
       await user.click(screen.getByTestId('s1-checkbox').querySelector('input[type="checkbox"]'))
       
       // Check state display
-      expect(screen.getByText(/Section 1: checked=true — selected=none — text="Section 1"/)).toBeInTheDocument()
-      expect(screen.getByText(/Section 2: checked=false — selected=none — text="Section 2"/)).toBeInTheDocument()
+      // State display removed - verify state by checking field values
+      expect(screen.getByTestId('s1-checkbox').querySelector('input[type="checkbox"]')).toBeChecked()
+      expect(screen.getByTestId('s1-text-field').querySelector('input')).toHaveValue('Section 1')
+      expect(screen.getByTestId('s2-checkbox').querySelector('input[type="checkbox"]')).not.toBeChecked()
+      expect(screen.getByTestId('s2-text-field').querySelector('input')).toHaveValue('Section 2')
     })
   })
 

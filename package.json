@@ -6,13 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
-    "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage",
-    "test:coverage-ui": "vitest --ui --coverage",
-    "test:report": "vitest run --reporter=html --reporter=json --outputFile.json=./test-results.json --outputFile.html=./TEST_REPORT.html"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",
@@ -23,15 +17,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^14.6.1",
     "@vitejs/plugin-react": "^5.1.1",
-    "@vitest/coverage-v8": "^4.0.12",
-    "@vitest/ui": "^4.0.12",
-    "happy-dom": "^12.10.3",
-    "jsdom": "^23.0.1",
-    "vite": "^5.0.0",
-    "vitest": "^4.0.11"
+    "vite": "^5.0.0"
   }
 }
